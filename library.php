@@ -5,8 +5,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     die("Request must be POST, recieved {$_SERVER["REQUEST_METHOD"]}");
 }
 
-if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== "on") {
-    die("Request must can be sent only over HTTPS");
+if ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443) {
+    die("Request must be sent only over HTTPS");
 }
 
 

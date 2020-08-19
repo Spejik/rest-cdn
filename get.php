@@ -4,7 +4,7 @@
 require __DIR__ . "/library.php";
 
 
-$input = (object) file_get_contents("php://input");
+$input = json_decode(file_get_contents("php://input"));
 
 if ($input->token && in_array($input->token, $tokens) &&
     $input->file_name && !empty($input->file_name))
@@ -38,9 +38,10 @@ class Get
     function get_data()
     {
         $fs = new Filesystem();
-        $dir = $fs->get_data_storage_directory() . $fs->get_data_storage_name();
+        $dir = $fs->get_data_storage_directory() . "/" . $fs->get_data_storage_name() . "/";
+        $file = $dir . $this->get_file_name();
 
-        return file_get_contents($dir . $this->get_file_name());
+        return file_get_contents($file);
     }
 
 
