@@ -11,6 +11,11 @@ if ($input->token && in_array($input->token, $tokens) &&
 {
     $upload = new Upload($input->file_name, $input->file_data);
 
+    //! change this to increase file size limit
+    if (mb_strlen($string, '8bit') >  1024 * 1024 * 2) {
+        echo json_encode(["success" => false, "errors" => ["strlen(file_data) is greater than 2MB"]]);
+    }
+
     if ($upload->upload_file())
         echo json_encode(["success" => true, "file_location" => "{$upload->get_file_name()}"]);
     else 
