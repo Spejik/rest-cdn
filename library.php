@@ -13,6 +13,9 @@ if ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERV
 $tokens = ['Qcm8gwN9FQWrkmmPvYY5afKYVX9ZN6KU'];
 
 
+// TODO: job that will delete all files older than (X)(time units) upon requesting upload/get.php
+
+
 class Filesystem 
 {
 
