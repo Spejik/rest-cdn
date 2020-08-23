@@ -20,10 +20,10 @@ if ($_GET["name"] && !empty($_GET["name"])) {
     $file_name = filter_var($_GET["name"], FILTER_SANITIZE_URL);
     $file_loc = $fs->get_namespace_filename_string("global", $file_name);
 
-    if ($fsi->file_exists_on_disk($file_loc))
+    if ($fsi->file_exists_on_disk("global", $file_name))
         echo file_get_contents($fs->get_datastorage_token_namespace_filename_path("global", $file_name));
     else
-        if ($fsi->file_exists_in_index($file_name))
+        if ($fsi->file_exists_in_index("global", $file_name))
             echo "file expired";
         else 
             echo "file unknown";

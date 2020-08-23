@@ -27,7 +27,7 @@ class FilesystemIndex
     }
 
 
-    // Get files in data_storage/(@namespace)/...
+    // Get files in data_storage/@{namespace}/...
     function get_data_storage_files_recursive(): array 
     {
         $rii = 
@@ -71,30 +71,32 @@ class FilesystemIndex
 
 
     // Returns if file exists on disk.. how unexpected
-    function file_exists_on_disk(string $file): bool
+    function file_exists_on_disk(string $namespace, string $file): bool
     {
-        return file_exists($this->fs->get_datastorage_token_path() . $file);
+        return file_exists(
+            $this->fs->get_datastorage_token_path() . $this->fs->get_namespace_filename_string($namespace, $file));
     }
 
 
-    // Returns if specific file is in index.bin.php
-    function file_exists_in_index(string $file): bool
+    // Returns if specific file is in data index
+    function file_exists_in_index(string $namespace, string $file): bool
     {
         $files = $this->get_data_storage_files_recursive();
-        return (in_array($file, $files));
+        return in_array($this->fs->get_namespace_filename_string($namespace, $file), $files);
     }
 
 
-
+    // Add a field to data index
     function add_index_field(string $namespace, string $file_name, DateTime $expires): void
     {
         $index = $this->get_data_storage_index();
-        $index[$this->fs->get_namespace_filename_string($namespace, $file_name)] 
-            = [
-                "created" => new DateTime(),
-                "expires" => $expires,
-                "namespace" => $namespace,
-                "file_name" => $file_name,
+        $file = $this->fs->get_namespace_filename_string($namespace, $file_name);
+        $index[$file] = 
+        [
+            "created" => new DateTime(),
+            "expires" => $expires,
+            "namespace" => $namespace,
+            "file_name" => $file_name,
         ];
 
         file_put_contents(
