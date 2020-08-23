@@ -17,7 +17,9 @@ class FilesystemIndex
     }
 
 
-    // Get data storage index file
+    /**
+     * Get data index file content
+     */
     function get_data_storage_index(): array
     {
         return 
@@ -27,7 +29,9 @@ class FilesystemIndex
     }
 
 
-    // Get files in data_storage/@{namespace}/...
+    /**
+     * Get files in data_storage/[...@{namespace}]/...
+     */
     function get_data_storage_files_recursive(): array 
     {
         $rii = 
@@ -49,7 +53,9 @@ class FilesystemIndex
     }
 
 
-    // Delete ANY files in data_storage if date of creation is beyond expiration date
+    /**
+     * Delete ANY files in data_storage if date of creation is beyond expiration date
+     */
     function delete_files_in_data_storage_if_expired(): void
     {
         $files = $this->get_data_storage_files_recursive();
@@ -70,7 +76,9 @@ class FilesystemIndex
     }
 
 
-    // Returns if file exists on disk.. how unexpected
+    /**
+     * Returns if file exists on disk.. how unexpected
+     */
     function file_exists_on_disk(string $namespace, string $file): bool
     {
         return file_exists(
@@ -78,7 +86,9 @@ class FilesystemIndex
     }
 
 
-    // Returns if specific file is in data index
+    /**
+     * Returns if specific file is in data index
+     */
     function file_exists_in_index(string $namespace, string $file): bool
     {
         $files = $this->get_data_storage_files_recursive();
@@ -86,7 +96,9 @@ class FilesystemIndex
     }
 
 
-    // Add a field to data index
+    /**
+     * Add a field to data index
+     */
     function add_index_field(string $namespace, string $file_name, DateTime $expires): void
     {
         $index = $this->get_data_storage_index();

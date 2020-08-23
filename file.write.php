@@ -112,7 +112,7 @@ class WriteFile
 
     function get_file_location(): string
     {
-        return "{$this->__namespace}/{$this->__name}";
+        return $this->fs->get_namespace_filename_string($this->__namespace, $this->__name);
     }
 
 }
