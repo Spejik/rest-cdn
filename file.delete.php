@@ -18,10 +18,7 @@ if ($input->token     && in_array($input->token, $tokens) &&
     $input->namespace && !empty($input->namespace) &&
     $input->file_name && !empty($input->file_name))
 {
-    if (DeleteFile($input->namespace, $input->file_name))
-        echo json_encode(["success" => true]);
-    else 
-        echo json_encode(["success" => false]);
+    echo json_encode(["success" => DeleteFile($input->namespace, $input->file_name)]);
 }
 else
 {
@@ -51,7 +48,8 @@ function DeleteFile(string $namespace, string $file_name): bool
     // delete any files that expired
     $fsi->delete_files_in_data_storage_if_expired();
 
-    $path = $fs->get_namespace_file_name_path($namespace, $file_name);
+    $path = $fs->get_datastorage_token_namespace_filename_path($namespace, $file_name);
+    echo $path, PHP_EOL;
     
     // return false if namespace or file doesnt exist
     if (!$fs->get_namespace_exists($namespace) || file_exists($path))

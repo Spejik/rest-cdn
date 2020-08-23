@@ -9,7 +9,7 @@
 class FilesystemIndex 
 {
     private $fs;
-    public $index_file = DIRECTORY_SEPARATOR . "index.bin.php";
+    public $index_file = "index.bin.php";
 
     function __construct()
     {
@@ -23,7 +23,7 @@ class FilesystemIndex
         return 
         (array) unserialize(
             file_get_contents(
-                $this->fs->get_data_storage_directory() . $this->index_file));
+                $this->fs->get_datastorage_path() . $this->index_file));
     }
 
 
@@ -33,7 +33,7 @@ class FilesystemIndex
         $rii = 
         new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator(
-                $this->fs->get_data_storage_path()));
+                $this->fs->get_datastorage_token_path()));
 
         $files = []; 
         
@@ -73,7 +73,7 @@ class FilesystemIndex
     // Returns if file exists on disk.. how unexpected
     function file_exists_on_disk(string $file): bool
     {
-        return file_exists($this->fs->get_data_storage_path() . $file);
+        return file_exists($this->fs->get_datastorage_token_path() . $file);
     }
 
 
@@ -89,7 +89,7 @@ class FilesystemIndex
     function add_index_field(string $namespace, string $file_name, DateTime $expires): void
     {
         $index = $this->get_data_storage_index();
-        $index[$this->fs->get_namespace_file_name_string($namespace, $file_name)] 
+        $index[$this->fs->get_namespace_filename_string($namespace, $file_name)] 
             = [
                 "created" => new DateTime(),
                 "expires" => $expires,
@@ -98,7 +98,7 @@ class FilesystemIndex
         ];
 
         file_put_contents(
-            $this->fs->get_data_storage_directory() . $this->index_file, 
+            $this->fs->get_datastorage_path() . $this->index_file, 
             serialize((array) $index));
     }
 }

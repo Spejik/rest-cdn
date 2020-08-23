@@ -47,7 +47,7 @@ function CreateNamespace(string $namespace): bool
     // delete any files that expired
     $fsi->delete_files_in_data_storage_if_expired();
 
-    $path = $fs->get_data_storage_namespace_path($namespace);
+    $path = $fs->get_datastorage_token_namespace_path($namespace);
 
     // return false if namespace exists
     if ($fs->get_namespace_exists($namespace))

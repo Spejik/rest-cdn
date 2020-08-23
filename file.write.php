@@ -102,7 +102,7 @@ class WriteFile
         $this->fs->rename_data_storage();
         // delete any files that expired
         $this->fsi->delete_files_in_data_storage_if_expired();
-        $file = $this->fs->get_data_storage_namespace_path($this->__namespace) . $this->__name;
+        $file = $this->fs->get_datastorage_token_namespace_path($this->__namespace) . $this->__name;
 
         file_put_contents($file, $this->__data);
 
@@ -112,7 +112,7 @@ class WriteFile
 
     function get_file_location(): string
     {
-        return "@{$this->__namespace}/{$this->__name}";
+        return "{$this->__namespace}/{$this->__name}";
     }
 
 }

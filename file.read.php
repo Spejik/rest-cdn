@@ -67,7 +67,7 @@ class Get
         // delete any files that expired
         $this->fsi->delete_files_in_data_storage_if_expired();
 
-        $file = $this->fs->get_data_storage_namespace_path($this->__namespace) . $this->__name;
+        $file = $this->fs->get_datastorage_token_namespace_path($this->__namespace) . $this->__name;
 
         return file_get_contents($file);
     }

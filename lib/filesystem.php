@@ -8,45 +8,69 @@
 
 class Filesystem 
 {
-    public $tokens_file = DIRECTORY_SEPARATOR . "tokens.bin.php";
+    public $tokens_file = "tokens.bin.php";
 
 
     // Get an array of all tokens 
     // token 0 is latest
-    function get_data_storage_tokens(): array
+    function get_datastorage_tokens(): array
     {
         return 
         (array) unserialize(
             file_get_contents(
-                $this->get_data_storage_directory() . $this->tokens_file));
+                $this->get_datastorage_path() . $this->tokens_file));
     }
 
 
     // Get the folder where data is actually stored
-    function get_data_storage_name(): string
+    function get_datastorage_token(): string
     {
-        return $this->get_data_storage_tokens()[0];
+        return $this->get_datastorage_tokens()[0];
     }
 
 
     // Get the name of the folder where data is getting stored to
-    function get_data_storage_directory(): string 
+    function get_datastorage_path(): string 
     {
-        return realpath(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "data_storage");
+        return realpath(__DIR__ . "/../" . "data_storage/");
     }
 
 
-    // Get full data storage path
-    function get_data_storage_path(): string
+    // {datastorage}/{token}/
+    function get_datastorage_token_path(): string
     {
-        return $this->get_data_storage_directory() . DIRECTORY_SEPARATOR . $this->get_data_storage_name() . DIRECTORY_SEPARATOR;
+        return $this->get_datastorage_path() . $this->get_datastorage_token() . DIRECTORY_SEPARATOR;
     }
 
 
+
+    // @{namespace}/{file_name}
+    function get_namespace_filename_string(string $namespace, string $file_name): string
+    {
+        return  $this->get_namespace_string($namespace) . DIRECTORY_SEPARATOR . $this->get_filename_string($file_name);
+    }
+
+
+    // {data_storage}/{token}/@{namespace}/
+    function get_datastorage_token_namespace_path(string $namespace): string
+    {
+        return $this->get_datastorage_token_path() . $this->get_namespace_string($namespace) . DIRECTORY_SEPARATOR;
+    }
+
+
+    // {data_storage}/{token}/@{namespace}/{file_name}
+    function get_datastorage_token_namespace_filename_path(string $namespace, string $file_name): string
+    {
+        return $this->get_datastorage_token_namespace_path($namespace) . $this->get_filename_string($file_name);
+    }
+
+
+    
+    
     // Get whether namespace exists in data_storage or not
     function get_namespace_exists(string $namespace): string
     {
-        return file_exists($this->get_data_storage_namespace_path($namespace));
+        return file_exists($this->get_datastorage_token_namespace_path($namespace));
     }
 
 
@@ -57,52 +81,28 @@ class Filesystem
     }
 
 
-
     // Get sanitized file name
-    function get_file_name_string(string $file_name): string
+    function get_filename_string(string $file_name): string
     {
         return filter_var($file_name, FILTER_SANITIZE_URL);
-    }
-
-
-    // @{namespace}/{file_name}
-    function get_namespace_file_name_string(string $namespace, string $file_name): string
-    {
-        return  $this->get_namespace_string($namespace) . 
-                DIRECTORY_SEPARATOR . 
-                $this->get_file_name_string($file_name);
-    }
-
-
-    // {data_storage}/{token}/@{namespace}/
-    function get_data_storage_namespace_path(string $namespace): string
-    {
-        return $this->get_data_storage_path() . $this->get_namespace_string($namespace) . DIRECTORY_SEPARATOR;
-    }
-
-
-    // {data_storage}/{token}/@{namespace}/{file_name}
-    function get_namespace_file_name_path(string $namespace, string $file_name): string
-    {
-        return $this->get_data_storage_namespace_path($namespace) . $this->get_file_name_string($file_name);
     }
 
 
     // Rename the (sub)folder (default "_____") where data is stored
     function rename_data_storage(): void
     {
-        $tokens = $this->get_data_storage_tokens();
-        $old_token = $this->get_data_storage_name();
+        $tokens = $this->get_datastorage_tokens();
+        $old_token = $this->get_datastorage_token();
         $new_token = bin2hex(random_bytes(32)); // generates a secure random string (32 bytes)
 
         array_unshift($tokens, $new_token);
         
         file_put_contents(
-            $this->get_data_storage_directory() . $this->tokens_file, 
+            $this->get_datastorage_path() . $this->tokens_file, 
             serialize((array) $tokens));
         rename(
-            $this->get_data_storage_directory() . DIRECTORY_SEPARATOR . $old_token, 
-            $this->get_data_storage_directory() . DIRECTORY_SEPARATOR . $new_token);
+            $this->get_datastorage_path() . DIRECTORY_SEPARATOR . "$old_token", 
+            $this->get_datastorage_path() . DIRECTORY_SEPARATOR . "$new_token");
     }
 
 }
