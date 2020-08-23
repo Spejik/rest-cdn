@@ -1,7 +1,4 @@
 <?php
 
-
-echo json_encode((object) ["message" => "Available endpoints: upload.php, get.php"]), ";";
-
-
-require __DIR__ . "/library.php";
+$version = file_get_contents(__DIR__ . "/VERSION");
+echo json_encode(["message" => "Using REST-CDN {$version} (https://github.com/spejik/rest-cdn)"]);
