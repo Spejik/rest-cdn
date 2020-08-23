@@ -67,6 +67,6 @@ class Get
 
         $file = $this->fs->get_datastorage_token_namespace_path($this->__namespace) . $this->__name;
 
-        return file_get_contents($file);
+        return @file_get_contents($file);
     }
 }
