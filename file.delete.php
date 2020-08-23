@@ -49,10 +49,9 @@ function DeleteFile(string $namespace, string $file_name): bool
     $fsi->delete_files_in_data_storage_if_expired();
 
     $path = $fs->get_datastorage_token_namespace_filename_path($namespace, $file_name);
-    echo $path, PHP_EOL;
     
     // return false if namespace or file doesnt exist
-    if (!$fs->get_namespace_exists($namespace) || file_exists($path))
+    if (!$fs->get_namespace_exists($namespace) || !file_exists($path))
         return false;
 
     unlink($path);

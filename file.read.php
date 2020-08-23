@@ -62,8 +62,6 @@ class Get
 
     function get_data()
     {
-        // rename data_storage to increase security
-        $this->fs->rename_data_storage();
         // delete any files that expired
         $this->fsi->delete_files_in_data_storage_if_expired();
 
